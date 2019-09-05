@@ -75,6 +75,7 @@ Both the LDAP via BindDN and the simple auth LDAP share the following fields:
   - The DN to bind to the LDAP server with when searching for the user. This
     may be left blank to perform an anonymous search.
   - Example: `cn=Search,dc=mydomain,dc=com`
+  - Example for Samba (AD): `mydomain\myusername`
 
 - Bind Password (optional)
   - The password for the Bind DN specified above, if any. _Note: The password
@@ -84,6 +85,7 @@ Both the LDAP via BindDN and the simple auth LDAP share the following fields:
 - User Search Base **(required)**
   - The LDAP base at which user accounts will be searched for.
   - Example: `ou=Users,dc=mydomain,dc=com`
+  - Example for Samba (AD): `cn=Users,dc=mydomain,dc=com`
 
 - User Filter **(required)**
   - An LDAP filter declaring how to find the user record that is attempting to
@@ -95,6 +97,7 @@ Both the LDAP via BindDN and the simple auth LDAP share the following fields:
     matching supplied login name against multiple attributes such as user
     identifier, email or even phone number.
   - Example: `(&(objectClass=Person)(|(uid=%[1]s)(mail=%[1]s)(mobile=%[1]s)))`
+  - Example for Samba (AD): `(&(objectClass=person)(cn=%[1]s))`
 - Enable user synchronization
   - This option enables a periodic task that synchronizes the Gitea users with
     the LDAP server. The default period is every 24 hours but that can be
@@ -143,6 +146,9 @@ Both the LDAP via BindDN and the simple auth LDAP share the following fields:
 * Group Attribute for User (optional)
     * Which group LDAP attribute contains an array above user attribute names.
     * Example: `memberUid`
+
+When you experience any problems setting up the LDAP connection correctly, set the logging level to debug and monitor the gitea.log file after changing the authentication settings step by step and performing a login each time.
+For Samba (AD) use BindDN, port: 389, StartTLS and Skip TLS Verify (if needed). It might by useful to also investigate the ldap directory with a ldap browser tool of you choice, to get a better understand of how it works and its actually set up.
 
 ## PAM (Pluggable Authentication Module)
 
